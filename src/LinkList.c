@@ -96,7 +96,11 @@ LinkList *updateLinklist(LinkList *head, int pos, int newElem)
 {
     int i = 0;
     LinkList *temp = head;
-    temp = temp->next; // temp指向的是首元节点
+    // temp指向的是首元节点
+    temp = temp->next;
+    if (pos == 0) {
+        printf("position invalid!!!!\n");
+    }
 
     for (i = 1; i < pos; ++i) {
         temp = temp->next;
@@ -106,9 +110,12 @@ LinkList *updateLinklist(LinkList *head, int pos, int newElem)
     return head;
 }
 // 打印链表
-void display(LinkList *head)
+void display(LinkList *head, int flag)
 {
     LinkList *temp = head;
+
+    if (flag) temp = temp->next;
+
     while (temp) {
         printf("%d\t", temp->elem);
         temp = temp->next;
@@ -120,29 +127,35 @@ void display(LinkList *head)
 // (1) 迭代反转法
 LinkList *itertrator_reverse(LinkList *head)
 {
+    // printf("old head: 0x%x\n", head);
     if (head == NULL || head->next == NULL) {
         printf("LinkList is NULL!!!\n");
         return head;
-    } else {
-        LinkList *beg = NULL;
-        LinkList *mid = head;
-        LinkList *end = head->next;
-
-        while (1) {
-            // 修改mid 节点的指向
-            mid->next = beg;
-            // mid 走到最后一个节点，end为NULL
-            if (end == NULL) {
-                break;
-            }
-            beg = mid;
-            mid = end;
-            end = end->next;
-        }
-
-        head = mid;
-        return head;
     }
+
+    // LinkList *temp = head->next;
+
+    LinkList *beg = NULL;
+    LinkList *mid = head;
+    LinkList *end = head->next;
+
+    while (1) {
+        // 修改mid 节点的指向
+        mid->next = beg;
+        // mid 走到最后一个节点，end为NULL
+        if (end == NULL) {
+            break;
+        }
+        beg = mid;
+        mid = end;
+        end = end->next;
+    }
+
+    head = mid;
+    // printf("head->val: %d\n", head->elem);
+    // printf("head->next->val: %d\n", head->next->elem);
+    // printf("new head: 0x%x\n", head);
+    return head;
 }
 
 // (2) 递归反转法
@@ -151,10 +164,53 @@ LinkList *recurise_reverse(LinkList *head)
     if (head == NULL || head->next == NULL) {
         // printf("LinkList is NULL or only onde node!!!\n");
         return head;
-    } else {
-        LinkList *new_head = recurise_reverse(head->next);
-        head->next->next = head;
-        head->next = NULL;
-        return new_head;
     }
+    LinkList *new_head = recurise_reverse(head->next);
+    head->next->next = head;
+    head->next = NULL;
+    return new_head;
 }
+
+// (3) 头插法反转链表
+LinkList *head_reverse(LinkList * head)
+{
+    LinkList *temp = NULL;
+    LinkList *new_head = NULL;
+
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+
+        temp->next = new_head;
+        new_head = temp;
+    }
+
+    return new_head;
+}
+
+// (4) 就地逆置方法反转链表
+LinkList *local_reverse(LinkList *head)
+{
+    // LinkList *beg = NULL;
+    // LinkList *end = NULL;
+    LinkList *beg = head;
+    LinkList *end = head->next;
+
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    while (end != NULL) {
+        beg->next = end->next;
+        end->next = head;
+        head = end;
+        end = beg->next;
+    }
+
+    return head;
+}
+

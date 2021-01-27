@@ -33,7 +33,7 @@ int selectElem(LinkList *head, int elem);
 // 链表更新元素
 LinkList *updateLinklist(LinkList *head, int pos, int newElem);
 // 打印链表
-void display(LinkList *head);
+void display(LinkList *head, int flag);
 
 
 // 单链表的反转
@@ -41,6 +41,11 @@ void display(LinkList *head);
 LinkList *itertrator_reverse(LinkList *head);
 // (2) 递归反转法
 LinkList *recurise_reverse(LinkList *head);
+
+// (3) 头插法反转链表
+LinkList *head_reverse(LinkList * head);
+// (4) 就地逆置方法反转链表
+LinkList *local_reverse(LinkList *head);
 
 // test funciton
 // void SingleLinklistTest();
